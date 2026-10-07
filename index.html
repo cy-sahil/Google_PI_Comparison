@@ -872,9 +872,70 @@
         const inr = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
         const yearsText = (term) => term === '1 Year' ? '1 Year' : term.replace('Year', 'Years');
 
+        // --- Fit the form on one screen on phones (same design, just scaled down) ---
+        function fitModalToScreen() {
+            const box = document.getElementById('form-modal-box');
+            if (!box || modalOverlay.classList.contains('hidden') || modalOverlay.style.display === 'none') return;
+            box.style.zoom = ''; box.style.width = ''; box.style.maxWidth = ''; box.style.maxHeight = '';
+            if (window.innerWidth >= 768 || !('zoom' in box.style)) return; // desktop keeps its own 75% size
+
+            const cs = getComputedStyle(modalOverlay);
+            const availH = window.innerHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 4; // small safety margin
+            const naturalW = box.getBoundingClientRect().width;
+            box.style.maxHeight = 'none';
+            const heightAt = (scale) => {
+                // keep the same on-screen width at every scale, so the layout doesn't change
+                box.style.zoom = scale;
+                box.style.width = (naturalW / scale) + 'px';
+                box.style.maxWidth = 'none';
+                return box.scrollHeight * scale; // on-screen height of the whole form
+            };
+            const MIN_SCALE = 0.62;
+            let z = 1;
+            if (heightAt(1) > availH) {
+                let lo = MIN_SCALE, hi = 1;
+                if (heightAt(lo) > availH) { z = lo; }
+                else {
+                    for (let i = 0; i < 8; i++) { const mid = (lo + hi) / 2; if (heightAt(mid) <= availH) lo = mid; else hi = mid; }
+                    z = Math.floor(lo * 1000) / 1000;
+                }
+                heightAt(z);
+            }
+            if (z >= 1) { box.style.zoom = ''; box.style.width = ''; box.style.maxWidth = ''; box.style.maxHeight = ''; return; }
+            box.style.maxHeight = (availH / z) + 'px'; // if it still doesn't fit at the smallest size, it scrolls
+            // final check: nudge the size down until nothing is left to scroll
+            for (let i = 0; i < 8 && z > MIN_SCALE && box.scrollHeight > box.clientHeight + 1; i++) {
+                z = Math.max(MIN_SCALE, Math.round((z - 0.01) * 1000) / 1000);
+                box.style.maxHeight = 'none';
+                heightAt(z);
+                box.style.maxHeight = (availH / z) + 'px';
+            }
+        }
+
+        // iPhone only: stop Safari auto-zooming into the smaller form fields (pinch-zoom still works on iOS)
+        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+            const vp = document.querySelector('meta[name="viewport"]');
+            if (vp) vp.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0');
+        }
+
         // --- PAGE INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             captureUTMParams();
+
+            // Size the form to the phone screen; re-check on rotation (not when the keyboard opens)
+            fitModalToScreen();
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitModalToScreen);
+            window.addEventListener('load', fitModalToScreen);
+            // re-check shortly after load, once web fonts have swapped in (skipped while the doctor is typing)
+            [600, 1500, 3000].forEach((ms) => setTimeout(() => {
+                const el = document.activeElement;
+                if (!el || !['INPUT', 'SELECT'].includes(el.tagName)) fitModalToScreen();
+            }, ms));
+            let lastWidth = window.innerWidth;
+            window.addEventListener('resize', () => {
+                if (window.innerWidth !== lastWidth) { lastWidth = window.innerWidth; fitModalToScreen(); }
+            });
+            window.addEventListener('orientationchange', () => setTimeout(fitModalToScreen, 300));
             renderRatings();
 
             coverAmountInput.addEventListener('change', updateAllPrices);
