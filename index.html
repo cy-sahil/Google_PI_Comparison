@@ -97,6 +97,39 @@
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
         .term-col { cursor: pointer; }
+
+        /* ---- Cross-device fixes ---- */
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        body { overflow-x: hidden; }
+        /* Modal fits the visible screen on iPhone/Android (address bar aware) */
+        #form-modal-box { max-height: 95vh; max-height: 95dvh; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+        /* Desktop modal is shown at 75% zoom; let it use the full screen height (only where zoom is supported) */
+        @supports (zoom: 0.75) {
+            @media (min-width: 768px) { #form-modal-box { max-height: calc(95vh / 0.75); max-height: calc(95dvh / 0.75); } }
+        }
+        #form-modal-overlay { padding-top: max(1rem, env(safe-area-inset-top)); padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+        /* Consistent dropdowns on Safari, Firefox and Windows */
+        .modal-select, .main-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+        select::-ms-expand { display: none; }
+        /* Snappier taps on phones, no grey flash on iOS */
+        a, button, select, input, label, .term-col { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        /* Hover-lift effects only on devices with a real mouse (prevents "stuck" hover on touch screens) */
+        @media (hover: none) {
+            .cta-button:hover { transform: none; }
+        }
+        /* Phones (iPhone and Android) */
+        @media (max-width: 430px) {
+            #main-content .info-icon { display: none !important; }
+            #main-content .term-col { padding-left: 0.375rem !important; padding-right: 0.375rem !important; }
+            #main-content .price-box { font-size: 0.85rem !important; padding-left: 0.25rem !important; padding-right: 0.25rem !important; }
+            #main-content p.uppercase.tracking-wider { letter-spacing: 0 !important; }
+            #main-content p.uppercase.tracking-wider { font-size: 9px !important; overflow-wrap: normal; }
+        }
+        @media (max-width: 340px) {
+            #main-content .price-box { font-size: 0.74rem !important; }
+        }
+        /* Long words never push the layout wider than the screen */
+        h1, h2, h3, h4, p, li, span { overflow-wrap: break-word; }
         .hp-field { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 
         @media (prefers-reduced-motion: reduce) { #logo-track { animation: none; } }
@@ -104,7 +137,7 @@
 
     <script>
         tailwind.config = {
-            theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] } } }
+            theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'] } } }
         }
     </script>
 </head>
@@ -116,7 +149,7 @@
 
     <!-- Pop-up Modal -->
     <div id="form-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40 flex items-center justify-center p-4">
-        <div id="form-modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-heading" class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-md max-h-[95vh] overflow-y-auto custom-scrollbar md:max-h-none md:overflow-visible md:[zoom:0.75]">
+        <div id="form-modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-heading" class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-md max-h-[95vh] overflow-y-auto custom-scrollbar md:[zoom:0.75]">
             <div class="flex justify-center mb-4">
                 <span class="inline-block bg-[#f1f5f9] text-gray-400 text-center text-[9px] md:text-[10px] font-bold px-3 py-1 rounded-full border border-gray-200 uppercase tracking-widest shadow-sm">
                     Medical Indemnity Insurance for Doctors
@@ -229,7 +262,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 text-left items-end">
                 <div class="p-3 md:p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg border border-gray-200 transition-all duration-300 hover:shadow-xl">
                     <div class="flex items-center space-x-2 md:space-x-3">
-                        <div class="flex-shrink-0 bg-primary-color/10 p-1.5 md:p-2 rounded-full">
+                        <div class="info-icon flex-shrink-0 bg-primary-color/10 p-1.5 md:p-2 rounded-full">
                             <svg class="h-4 w-4 md:h-5 md:w-5 text-primary-color" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                             </svg>
@@ -242,7 +275,7 @@
                 </div>
                 <div class="p-3 md:p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg border border-gray-200 transition-all duration-300 hover:shadow-xl">
                     <div class="flex items-center space-x-2 md:space-x-3">
-                        <div class="flex-shrink-0 bg-primary-color/10 p-1.5 md:p-2 rounded-full">
+                        <div class="info-icon flex-shrink-0 bg-primary-color/10 p-1.5 md:p-2 rounded-full">
                             <svg class="h-4 w-4 md:h-5 md:w-5 text-primary-color" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                             </svg>
@@ -343,7 +376,7 @@
                     <!-- connector line: vertical on mobile, horizontal on desktop -->
                     <div class="absolute left-[21px] top-2 bottom-2 w-0.5 bg-white/15 md:hidden"></div>
                     <div class="hidden md:block absolute top-7 left-[12.5%] right-[12.5%] h-0.5 bg-white/15"></div>
-                    <ol class="relative grid md:grid-cols-4">
+                    <ol class="relative grid grid-cols-1 md:grid-cols-4">
                     <li class="relative flex md:flex-col gap-4 md:gap-0 pb-8 md:pb-0 md:px-3 last:pb-0">
                         <div class="relative z-10 w-11 h-11 md:w-14 md:h-14 rounded-full primary-color text-white flex items-center justify-center text-lg md:text-2xl font-black shadow-[0_0_0_6px_#444444] shrink-0 md:mx-auto">1</div>
                         <div class="md:text-center md:mt-5">
@@ -505,12 +538,12 @@
             </div>
 
             <!-- Coverage Cards -->
-            <div class="grid md:grid-cols-2 gap-8 mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
                 <!-- What's Covered -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+                <div class="bg-white rounded-[2rem] p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 min-w-0">
                     <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-t-[2rem]"></div>
                     <div class="flex items-center mb-8">
-                        <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mr-5 shadow-inner border border-emerald-100">
+                        <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mr-4 md:mr-5 shadow-inner border border-emerald-100 shrink-0">
                             <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                         <h3 class="text-2xl font-extrabold text-[#444444] tracking-tight">What Medical Indemnity Insurance Covers</h3>
@@ -525,10 +558,10 @@
                 </div>
 
                 <!-- What's Not Covered -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+                <div class="bg-white rounded-[2rem] p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 min-w-0">
                     <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-400 to-red-500 rounded-t-[2rem]"></div>
                     <div class="flex items-center mb-8">
-                        <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mr-5 shadow-inner border border-red-100">
+                        <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mr-4 md:mr-5 shadow-inner border border-red-100 shrink-0">
                             <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                         <h3 class="text-2xl font-extrabold text-[#444444] tracking-tight">What's Typically Not Covered</h3>
@@ -551,7 +584,7 @@
                     <h2 class="text-3xl md:text-4xl font-extrabold text-[#444444] tracking-tight">Frequently Asked Questions</h2>
                     <div class="w-16 h-1.5 bg-primary-color mx-auto rounded-full mt-4 opacity-80"></div>
                 </div>
-                <div class="grid md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group">
                         <div class="absolute left-0 top-8 w-1.5 h-12 bg-primary-color rounded-r-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <h4 class="font-bold text-[#444444] text-xl mb-3 flex items-start"><span class="text-primary-color mr-3">Q.</span> How do I choose the right medical indemnity insurance?</h4>
@@ -618,7 +651,7 @@
                             </div>
                         </a>
                         <a href="tel:18002026900" class="flex items-center p-4 border border-gray-200 rounded-xl bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 w-full sm:w-1/2 group">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary-color mr-4 group-hover:scale-110 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75V15a3 3 0 01-3 3h-1.5a3 3 0 01-3-3v-2.25a3 3 0 013-3h1.5M2.25 12v3c0 1.657 1.343 3 3 3h1.5a3 3 0 003-3v-2.25a3 3 0 00-3-3h-1.5" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary-color mr-4 group-hover:scale-110 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12c0-5.385 4.365-9.750 9.75-9.75s9.75 4.365 9.75 9.75V15a3 3 0 01-3 3h-1.5a3 3 0 01-3-3v-2.25a3 3 0 013-3h1.5M2.25 12v3c0 1.657 1.343 3 3 3h1.5a3 3 0 003-3v-2.25a3 3 0 00-3-3h-1.5" /></svg>
                             <div class="text-left">
                                 <p class="text-[11px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Customer Sales Enquiries</p>
                                 <p class="text-[#444444] font-extrabold text-lg leading-tight">1800-202-6900</p>
@@ -635,7 +668,7 @@
                  Fill every [placeholder] and get compliance sign-off before publishing. -->
             <div class="text-left bg-white rounded-2xl border border-gray-200 p-5 md:p-8 mt-6">
                 <h3 class="text-sm md:text-base font-extrabold text-gray-800 mb-4">Important Information</h3>
-                <div class="grid md:grid-cols-2 gap-x-10 gap-y-5 text-[11px] md:text-xs text-gray-600 leading-relaxed">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5 text-[11px] md:text-xs text-gray-600 leading-relaxed">
                     <div>
                         <h4 class="font-bold text-gray-700 mb-1">Footnotes</h4>
                         <p>(1) The starting premium of ₹1,180 (incl. 18% GST) is for Professional Indemnity Insurance by ICICI Lombard General Insurance Company Limited, for a General Physician with a ₹50 Lakh sum insured and a 1-year policy term. (2) Savings compare the 2 or 3-year premium with paying the current 1-year premium for the same specialisation and sum insured every year for the same term. Future 1-year premiums may be higher or lower, so actual savings may differ.</p>
@@ -885,6 +918,7 @@
             specializationSearch.addEventListener('input', () => {
                 populateSpecializationList(specializationSearch.value);
                 specializationValue.value = resolveSpecialization(specializationSearch.value);
+                if (specializationValue.value) specializationList.classList.add('hidden');
             });
             specializationSearch.addEventListener('focus', () => populateSpecializationList(specializationSearch.value));
             specializationSearch.addEventListener('blur', () => {
