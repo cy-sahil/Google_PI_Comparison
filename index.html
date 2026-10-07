@@ -11,6 +11,8 @@
     <!-- End Google Tag Manager -->
 
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="https://www.coveryou.in/images/new_ui/compare/coveryou-logo.png">
+    <link rel="apple-touch-icon" href="https://www.coveryou.in/images/new_ui/compare/coveryou-logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medical Indemnity Insurance for Doctors | Compare Plans | CoverYou</title>
     <meta name="description" content="Compare medical indemnity insurance for doctors. See your 1, 2 and 3-year medical indemnity insurance premiums instantly and get medico-legal support from CoverYou.">
@@ -103,10 +105,6 @@
         body { overflow-x: hidden; }
         /* Modal fits the visible screen on iPhone/Android (address bar aware) */
         #form-modal-box { max-height: 95vh; max-height: 95dvh; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
-        /* Desktop modal is shown at 75% zoom; let it use the full screen height (only where zoom is supported) */
-        @supports (zoom: 0.75) {
-            @media (min-width: 768px) { #form-modal-box { max-height: calc(95vh / 0.75); max-height: calc(95dvh / 0.75); } }
-        }
         #form-modal-overlay { padding-top: max(1rem, env(safe-area-inset-top)); padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
         /* Consistent dropdowns on Safari, Firefox and Windows */
         .modal-select, .main-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
@@ -128,6 +126,10 @@
         @media (max-width: 340px) {
             #main-content .price-box { font-size: 0.74rem !important; }
         }
+        /* Consent checkbox: bigger, easier to tap (the whole consent text is also tappable) */
+        #consent { width: 1.15rem; height: 1.15rem; margin-top: 0; cursor: pointer; accent-color: #f05d49; }
+        @media (max-width: 767px) { #consent { width: 1.4rem; height: 1.4rem; } }
+        .consent-row.needs-consent #consent { outline: 2px solid #f05d49; outline-offset: 2px; border-radius: 3px; }
         /* Long words never push the layout wider than the screen */
         h1, h2, h3, h4, p, li, span { overflow-wrap: break-word; }
         .hp-field { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
@@ -149,7 +151,7 @@
 
     <!-- Pop-up Modal -->
     <div id="form-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40 flex items-center justify-center p-4">
-        <div id="form-modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-heading" class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-md max-h-[95vh] overflow-y-auto custom-scrollbar md:[zoom:0.75]">
+        <div id="form-modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-heading" class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-md max-h-[95vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-center mb-4">
                 <span class="inline-block bg-[#f1f5f9] text-gray-400 text-center text-[9px] md:text-[10px] font-bold px-3 py-1 rounded-full border border-gray-200 uppercase tracking-widest shadow-sm">
                     Medical Indemnity Insurance for Doctors
@@ -240,7 +242,7 @@
                         </select>
                     </div>
 
-                    <label class="flex items-start gap-2 text-[10px] md:text-[9px] text-gray-500 leading-tight pt-1">
+                    <label for="consent" class="consent-row flex items-start gap-2 text-[10px] md:text-[9px] text-gray-500 leading-tight pt-1 cursor-pointer">
                         <input type="checkbox" id="consent" class="mt-0.5 h-3.5 w-3.5 shrink-0 accent-[#f05d49]">
                         <span>I agree that CoverYou may use my details to share my quote and contact me about it via call, SMS, WhatsApp or email, and I accept the
                             <a href="https://pi.coveryou.in/terms-conditions" target="_blank" rel="noopener" class="font-bold text-gray-600 underline">Terms &amp; Conditions</a> and
@@ -620,7 +622,6 @@
         </div>
 
         <!-- Customer Reviews & Ratings Section -->
-        <!-- NOTE: add the source of this rating (e.g. Google reviews) before publishing -->
         <div class="max-w-5xl mx-auto px-4 mb-20 mt-10">
             <div class="bg-[#FDF8E7] rounded-[2rem] p-8 md:p-14 flex flex-col md:flex-row items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.03)] border border-[#f5ead0]">
                 <div class="w-full md:w-5/12 flex flex-col items-center justify-center mb-8 md:mb-0 md:border-r-[1.5px] md:border-dashed md:border-[#c5bca4] md:pr-12 md:py-4">
@@ -629,6 +630,7 @@
                 </div>
                 <div id="rating-rows" class="w-full md:w-7/12 md:pl-12 flex flex-col"></div>
             </div>
+            <p class="text-center text-xs text-gray-500 mt-3">These ratings are based on public Google reviews of CoverYou.</p>
         </div>
 
         <!-- Support / Contact Section -->
@@ -675,7 +677,7 @@
                     </div>
                     <div>
                         <h4 class="font-bold text-gray-700 mb-1">About the premiums</h4>
-                        <p>All premiums shown include 18% GST and are indicative as of [DD Month YYYY]. They are based only on the specialisation and sum insured you select. The final premium is decided by the insurer based on your proposal form, including your qualifications, practice details, retroactive date and claims history, and is subject to the insurer's underwriting and acceptance. Premiums may change at renewal. Multi-year premiums are payable upfront; cancellation and any refund are as per the policy terms.</p>
+                        <p>All premiums shown include 18% GST and are indicative. They are based only on the specialisation and sum insured you select. The final premium is decided by the insurer based on your proposal form, including your qualifications, practice details, retroactive date and claims history, and is subject to the insurer's underwriting and acceptance. Premiums may change at renewal. Multi-year premiums are payable upfront; cancellation and any refund are as per the policy terms.</p>
                     </div>
                     <div>
                         <h4 class="font-bold text-gray-700 mb-1">About the cover</h4>
@@ -695,15 +697,15 @@
                     </div>
                     <div>
                         <h4 class="font-bold text-gray-700 mb-1">Your data and consent</h4>
-                        <p>By submitting your details, you authorise CoverYou to use them to share your quote and contact you about it by call, SMS, WhatsApp or email, even if your number is registered under DND. You can withdraw your consent at any time by writing to [privacy@coveryou.in]. Please read our Privacy Policy and Terms &amp; Conditions.</p>
+                        <p>By submitting your details, you authorise CoverYou to use them to share your quote and contact you about it by call, SMS, WhatsApp or email, even if your number is registered under DND. You can withdraw your consent at any time by writing to privacy@coveryou.in. Please read our Privacy Policy and Terms &amp; Conditions.</p>
                     </div>
                     <div>
                         <h4 class="font-bold text-gray-700 mb-1">Figures, ratings and logos</h4>
-                        <p>Figures shown about CoverYou are as per CoverYou's internal records as of [DD Month YYYY]. Ratings are based on [number] reviews on [platform] as of [DD Month YYYY]. Logos of medical associations are displayed with their permission and do not mean that any association recommends a specific insurance product.</p>
+                        <p>Figures shown about CoverYou are as per CoverYou's internal records. Ratings are based on public Google reviews of CoverYou. Logos of medical associations are displayed with their permission and do not mean that any association recommends a specific insurance product.</p>
                     </div>
                     <div>
                         <h4 class="font-bold text-gray-700 mb-1">Grievances</h4>
-                        <p>For any complaint, write to our Grievance Officer at [grievance@coveryou.in] or call 1800-202-6900. For complaints about a policy or claim, you may also contact the insurer's grievance cell. If your complaint is not resolved, you may register it on IRDAI's Bima Bharosa portal (bimabharosa.irdai.gov.in) or approach the Insurance Ombudsman.</p>
+                        <p>For any complaint, write to our Grievance Officer at grievance@coveryou.in or call 1800-202-6900. For complaints about a policy or claim, you may also contact the insurer's grievance cell. If your complaint is not resolved, you may register it on IRDAI's Bima Bharosa portal (bimabharosa.irdai.gov.in) or approach the Insurance Ombudsman.</p>
                     </div>
                 </div>
 
@@ -836,6 +838,7 @@
 
         let currentUser = { name: "", specialization: "", phone: "" };
         let ctaBtnProcessing = false;
+        let leadTracked = false;
 
         const detailsForm = document.getElementById('details-form');
         const modalOverlay = document.getElementById('form-modal-overlay');
@@ -877,10 +880,26 @@
             const box = document.getElementById('form-modal-box');
             if (!box || modalOverlay.classList.contains('hidden') || modalOverlay.style.display === 'none') return;
             box.style.zoom = ''; box.style.width = ''; box.style.maxWidth = ''; box.style.maxHeight = '';
-            if (window.innerWidth >= 768 || !('zoom' in box.style)) return; // desktop keeps its own 75% size
+            if (!('zoom' in box.style)) return; // very old browsers: form keeps its normal size and scrolls if needed
 
             const cs = getComputedStyle(modalOverlay);
             const availH = window.innerHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 4; // small safety margin
+
+            // Desktop / tablet: full size, scaled down only if the screen is too short (e.g. small laptops)
+            if (window.innerWidth >= 768) {
+                box.style.maxHeight = 'none';
+                const fullH = box.scrollHeight;
+                let zd = 1;
+                if (fullH > availH) zd = Math.max(0.7, Math.floor((availH / fullH) * 1000) / 1000);
+                if (zd < 1) box.style.zoom = zd;
+                box.style.maxHeight = (availH / zd) + 'px';
+                for (let i = 0; i < 6 && zd > 0.7 && box.scrollHeight > box.clientHeight + 1; i++) {
+                    zd = Math.round((zd - 0.01) * 1000) / 1000;
+                    box.style.zoom = zd;
+                    box.style.maxHeight = (availH / zd) + 'px';
+                }
+                return;
+            }
             const naturalW = box.getBoundingClientRect().width;
             box.style.maxHeight = 'none';
             const heightAt = (scale) => {
@@ -933,7 +952,7 @@
             }, ms));
             let lastWidth = window.innerWidth;
             window.addEventListener('resize', () => {
-                if (window.innerWidth !== lastWidth) { lastWidth = window.innerWidth; fitModalToScreen(); }
+                if (window.innerWidth >= 768 || window.innerWidth !== lastWidth) { lastWidth = window.innerWidth; fitModalToScreen(); }
             });
             window.addEventListener('orientationchange', () => setTimeout(fitModalToScreen, 300));
             renderRatings();
@@ -1012,6 +1031,7 @@
                 }
             });
 
+            document.getElementById('consent').addEventListener('change', () => document.querySelector('.consent-row').classList.remove('needs-consent'));
             phoneNumberInput.addEventListener('input', (e) => {
                 e.target.value = e.target.value.replace(/\D/g, '').replace(/^0+/, '').substring(0, 10);
             });
@@ -1041,7 +1061,7 @@
             if (rawName.length < 2) { showAlert("Please enter your full name.", "Input Error"); return; }
             if (!/^[6-9]\d{9}$/.test(phone)) { showAlert("Please enter a valid 10-digit mobile number.", "Input Error"); return; }
             if (!specialization) { showAlert("Please select a valid specialization from the list.", "Input Error"); return; }
-            if (!document.getElementById('consent').checked) { showAlert("Please tick the consent box so we can share your comparison.", "Consent Required"); return; }
+            if (!document.getElementById('consent').checked) { document.querySelector('.consent-row').classList.add('needs-consent'); showAlert("Please tick the consent box so we can share your comparison.", "Consent Required"); return; }
 
             // Send lead (skipped if the hidden spam-trap field was filled)
             if (!document.getElementById('website').value) {
@@ -1057,6 +1077,22 @@
                     consentTimestamp: new Date().toISOString(),
                     ...getAttributionData()
                 });
+
+                // GTM: lead form submitted successfully (fires once per page visit)
+                if (!leadTracked) {
+                    leadTracked = true;
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({
+                        event: 'lead_submit',
+                        lead_source: 'pi_comparison_form',
+                        specialization: specialization,
+                        sum_insured: coverAmount,
+                        policy_term: term,
+                        premium: rateCard[specialization]?.[coverAmount]?.[term] || '',
+                        // For Google Ads Enhanced Conversions only. Do NOT send this to GA4.
+                        user_data: { phone_number: '+91' + phone }
+                    });
+                }
             }
 
             currentUser.name = doctorName;
