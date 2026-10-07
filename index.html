@@ -100,6 +100,28 @@
 
         .term-col { cursor: pointer; }
 
+        /* Glassmorphism header */
+        .glass-header {
+            position: relative;
+            background: rgba(255, 255, 255, 0.6);
+            -webkit-backdrop-filter: blur(20px) saturate(170%);
+            backdrop-filter: blur(20px) saturate(170%);
+            transition: background-color 0.25s ease, box-shadow 0.25s ease;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow: 0 10px 30px -10px rgba(240, 93, 73, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+        .glass-header::after {
+            content: ""; position: absolute; left: 1.5rem; right: 1.5rem; bottom: -1px; height: 2px; border-radius: 2px;
+            background: linear-gradient(90deg, transparent, rgba(240, 93, 73, 0.6), rgba(251, 146, 60, 0.6), transparent);
+        }
+        @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+            .glass-header { background: rgba(255, 255, 255, 0.95); }
+        }
+        /* Once the page scrolls, frost the glass more so text behind it doesn't show through */
+        .glass-header.is-scrolled { background: rgba(255, 255, 255, 0.86); box-shadow: 0 12px 30px -12px rgba(68, 68, 68, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.9); }
+        .glass-header .cta-button { box-shadow: 0 6px 14px rgba(240, 93, 73, 0.35); }
+        .glass-header .cta-button:hover { transform: scale(1.04); }
+
         /* ---- Cross-device fixes ---- */
         html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
         body { overflow-x: hidden; }
@@ -258,7 +280,36 @@
     </div>
 
     <!-- Main Content App -->
-    <main id="main-content" class="min-h-screen p-4 md:p-8 pointer-events-none" inert>
+    <main id="main-content" class="relative isolate min-h-screen p-4 md:p-8 pointer-events-none" inert>
+        <!-- Soft coral glow behind the glass header -->
+        <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[560px] overflow-hidden">
+            <div class="absolute -top-28 -left-24 w-80 h-80 md:w-[28rem] md:h-[28rem] rounded-full bg-[#f05d49] opacity-20 blur-3xl"></div>
+            <div class="absolute -top-16 -right-16 w-72 h-72 md:w-[26rem] md:h-[26rem] rounded-full bg-orange-300 opacity-25 blur-3xl"></div>
+            <div class="absolute top-40 left-1/3 w-64 h-64 md:w-96 md:h-96 rounded-full bg-rose-200 opacity-40 blur-3xl"></div>
+        </div>
+
+        <!-- Glassmorphism header -->
+        <header class="sticky top-3 z-30 max-w-7xl mx-auto mb-6 md:mb-8">
+            <div class="glass-header flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5 md:px-5 md:py-3">
+                <div class="flex items-center gap-3 min-w-0">
+                    <img src="https://www.coveryou.in/images/svg/logo.svg" alt="CoverYou" class="h-7 md:h-9 w-auto shrink-0" height="36">
+                    <span class="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></span>
+                    <span class="hidden md:block text-[11px] lg:text-xs font-semibold text-gray-600 leading-tight uppercase tracking-wider">Medical Indemnity<br><span class="text-primary-color">Insurance for Doctors</span></span>
+                </div>
+                <div class="flex items-center gap-2 md:gap-3 shrink-0">
+                    <span class="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 bg-white/60 border border-white/80 rounded-full px-3 py-1.5 shadow-sm">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
+                        IRDAI Licensed Broker · Licence No. 825
+                    </span>
+                    <a href="tel:18002026900" aria-label="Call CoverYou on 1800-202-6900" class="inline-flex items-center gap-1.5 text-xs md:text-sm font-bold text-gray-700 bg-white/70 hover:bg-white border border-white/80 rounded-full px-3 py-2 shadow-sm transition">
+                        <svg class="w-4 h-4 text-primary-color" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg>
+                        <span class="hidden sm:inline">1800-202-6900</span><span class="sm:hidden">Call</span>
+                    </a>
+                    <button type="button" id="header-quote-btn" class="cta-button text-white text-xs md:text-sm font-bold rounded-full px-4 py-2 md:px-5">Get Quote</button>
+                </div>
+            </div>
+        </header>
+
         <div class="max-w-7xl mx-auto mb-6 md:mb-10 p-4 md:p-6 bg-white shadow-xl rounded-xl">
             <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-4 md:mb-6 text-center">Your Medical Indemnity Insurance Comparison, <span id="display-doctor-name-title" class="text-primary-color">Doctor</span>!</h1>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 text-left items-end">
@@ -994,6 +1045,11 @@
             });
             document.getElementById('cta-btn').addEventListener('click', handleCtaClick);
             document.getElementById('callback-btn').addEventListener('click', handleCallbackClick);
+            document.getElementById('header-quote-btn').addEventListener('click', handleCtaClick);
+            const glassHeader = document.querySelector('.glass-header');
+            const onScroll = () => glassHeader.classList.toggle('is-scrolled', window.scrollY > 24);
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
 
             specializationSearch.addEventListener('input', () => {
                 populateSpecializationList(specializationSearch.value);
